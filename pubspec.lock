@@ -176,6 +176,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.1"
+  tealium:
+    dependency: "direct main"
+    description:
+      name: tealium
+      sha256: fbba75ce760ac18dca7357735f54744842acb1ac0427355ee53433b79e63aced
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.6.2"
   term_glyph:
     dependency: transitive
     description:
