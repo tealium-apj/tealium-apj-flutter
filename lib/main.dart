@@ -43,8 +43,21 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final TextEditingController _traceController = TextEditingController();
+
+  @override
+  void dispose() {
+    _traceController.dispose();
+    super.dispose();
+  }
 
   void _sendEvent() {
     Tealium.track(TealiumEvent("button_click", {
@@ -55,10 +68,30 @@ class HomePage extends StatelessWidget {
 
   void _setConsentConsented() {
     Tealium.setConsentStatus(ConsentStatus.consented);
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Consent set to: consented')),
+    );
   }
 
   void _setConsentNotConsented() {
     Tealium.setConsentStatus(ConsentStatus.notConsented);
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Consent set to: notConsented')),
+    );
+  }
+
+  void _joinTrace() {
+    final id = _traceController.text.trim();
+    if (id.isNotEmpty) {
+      Tealium.joinTrace(id);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Joined trace: $id')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a trace id')),
+      );
+    }
   }
 
   @override
@@ -82,6 +115,23 @@ class HomePage extends StatelessWidget {
             ElevatedButton(
               onPressed: _setConsentNotConsented,
               child: const Text("Set Consent: Not Consented"),
+            ),
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: TextField(
+                controller: _traceController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Trace ID',
+                  hintText: 'Enter server-side trace id',
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            ElevatedButton(
+              onPressed: _joinTrace,
+              child: const Text('Join Trace'),
             ),
           ],
         ),
