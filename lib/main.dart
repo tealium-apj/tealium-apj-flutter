@@ -10,10 +10,21 @@ void main() async {
     "mobile-test",
     TealiumEnvironment.dev, // or TealiumEnvironment.qa, TealiumEnvironment.prod
     [Collectors.AppData, Collectors.Lifecycle],
-    [Dispatchers.RemoteCommands, Dispatchers.Collect],
+    [Dispatchers.RemoteCommands, Dispatchers.TagManagement],
+    // enable QR trace handling so the SDK will honor trace ids from server-side
+    // interfaces. Set to `false` if you don't want QR/deep-link trace joining.
+    qrTraceEnabled: true,
   );
 
   await Tealium.initialize(config);
+
+  // If you have a server-side trace id for debugging, join it here so that
+  // subsequent events include the traceId in the data layer. Replace the
+  // placeholder below with the real trace id from your server.
+  const serverTraceId = 'mqWLYfmz';
+  if (serverTraceId.isNotEmpty && serverTraceId != '') {
+    Tealium.joinTrace(serverTraceId);
+  }
 
   runApp(const MyApp());
 }
