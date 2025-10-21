@@ -14,6 +14,9 @@ void main() async {
     // enable QR trace handling so the SDK will honor trace ids from server-side
     // interfaces. Set to `false` if you don't want QR/deep-link trace joining.
     qrTraceEnabled: true,
+    // Enable consent logging and set the consent policy (GDPR/CCPA)
+    consentLoggingEnabled: true,
+    consentPolicy: ConsentPolicy.GDPR,
   );
 
   await Tealium.initialize(config);
@@ -50,14 +53,37 @@ class HomePage extends StatelessWidget {
     }));
   }
 
+  void _setConsentConsented() {
+    Tealium.setConsentStatus(ConsentStatus.consented);
+  }
+
+  void _setConsentNotConsented() {
+    Tealium.setConsentStatus(ConsentStatus.notConsented);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Tealium Example")),
       body: Center(
-        child: ElevatedButton(
-          onPressed: _sendEvent,
-          child: const Text("Send Event"),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ElevatedButton(
+              onPressed: _sendEvent,
+              child: const Text("Send Event"),
+            ),
+            const SizedBox(height: 12),
+            ElevatedButton(
+              onPressed: _setConsentConsented,
+              child: const Text("Set Consent: Consented"),
+            ),
+            const SizedBox(height: 8),
+            ElevatedButton(
+              onPressed: _setConsentNotConsented,
+              child: const Text("Set Consent: Not Consented"),
+            ),
+          ],
         ),
       ),
     );
