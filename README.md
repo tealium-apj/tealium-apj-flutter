@@ -1,4 +1,5 @@
 This repository is a Flutter example app demonstrating integration with the Tealium Flutter plugin.
+NOT THE OFFICIAL TEALIUM REPO
 
 The README below outlines quick, ordered steps to run the app on Android and iOS from macOS.
 
